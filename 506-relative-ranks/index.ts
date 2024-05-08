@@ -12,15 +12,11 @@ function findRelativeRanks(scores: number[]): string[] {
 
     indexedScores.sort((a,b) => b.score - a.score); // sort descending
 
+    const medals = ['Gold Medal', 'Silver Medal', 'Bronze Medal'];
     const rankStrings = new Array<string>(scores.length);
 
     for(let i = 0; i< indexedScores.length; i++) {
-        let rank = "";
-        if(i === 0) rank = "Gold Medal";
-        else if(i === 1) rank = "Silver Medal";
-        else if(i === 2) rank = "Bronze Medal";
-        else rank = (i + 1).toString();
-
+        const rank = i < 3 ? medals[i] : (i+1).toString();
         rankStrings[indexedScores[i].index] = rank;
     }
 
