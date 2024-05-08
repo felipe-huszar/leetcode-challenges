@@ -7,36 +7,21 @@ interface Rank {
     pos: number,
 }
 
-function findRelativeRanks(score: number[]): string[] {        
-    let ranks = new Array<Rank>();
-    let rankStrings = new Array<string>(score.length);
-    
-    for(let i = 0; i < score.length; i++) {
-        const num = score[i];
-        const rank = { score: num, pos: i };
-        if (ranks.length === 0) {
-            ranks.push(rank);
-            continue;
-        }
+function findRelativeRanks(scores: number[]): string[] {        
+    const indexedScores = scores.map((score, index) => ({ score, index }));
 
-        let found = false;
-        for(let j = 0; j < ranks.length; j++) {
-            const rankScore = ranks[j].score;
-            if (num === rankScore) return [] // values are supposed to be unique 
-            else if (num > rankScore) { 
-                ranks.splice(j, 0, rank); // Insert rank before position
-                found = true;
-                break;
-            }            
-        }
-        if(!found) ranks.push(rank); // Insert rank at the end
-    }
+    indexedScores.sort((a,b) => b.score - a.score); // sort descending
 
-    for(let i=0; i<ranks.length; i++) {
-        if(i === 0) rankStrings.splice(ranks[i].pos, 1, 'Gold Medal');
-        else if(i === 1) rankStrings.splice(ranks[i].pos, 1, 'Silver Medal');
-        else if(i === 2) rankStrings.splice(ranks[i].pos, 1, 'Bronze Medal');
-        else rankStrings.splice(ranks[i].pos, 1, (i+1).toString()); 
+    const rankStrings = new Array<string>(scores.length);
+
+    for(let i = 0; i< indexedScores.length; i++) {
+        let rank = "";
+        if(i === 0) rank = "Gold Medal";
+        else if(i === 1) rank = "Silver Medal";
+        else if(i === 2) rank = "Bronze Medal";
+        else rank = (i + 1).toString();
+
+        rankStrings[indexedScores[i].index] = rank;
     }
 
     return rankStrings;
